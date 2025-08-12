@@ -735,8 +735,26 @@ void osif_copy_connected_info(struct cfg80211_connect_resp_params *conn_rsp,
 			      struct cfg80211_bss *bss,
 			      struct wlan_objmgr_vdev *vdev)
 {
-	conn_rsp->bssid = rsp->bssid.bytes;
-	conn_rsp->bss = bss;
+#ifdef CFG80211_SINGLE_NETDEV_MULTI_LINK_SUPPORT
+	if (wlan_vdev_mlme_is_mlo_vdev(vdev)) {
+		qdf_debug("MLO vdev fill everything in mlo fill params");
+		return;
+	}
+
+	conn_rsp->links[0].bssid = rsp->bssid.bytes;
+	conn_rsp->links[0].bss = bss;
+	if (bss)
+		conn_rsp->valid_links |= BIT(0);
+#else
+	/*
+	 * These members are removed in newer kernels, but the bss info is
+	 * still required. It's now part of the links[] array.
+	 */
+	conn_rsp->links[0].bssid = rsp->bssid.bytes;
+	conn_rsp->links[0].bss = bss;
+	if (bss)
+		conn_rsp->valid_links |= BIT(0);
+#endif
 }
 #endif
 
