@@ -16,7 +16,7 @@
 
 
 CFLAGS_aha152x.o =   -DAHA152X_STAT -DAUTOCONF
-
+CFLAGS_scsi_srpmb.o += -I$(srctree)/drivers/ufs/host/s5e9945
 obj-$(CONFIG_PCMCIA)		+= pcmcia/
 
 obj-$(CONFIG_SCSI)		+= scsi_mod.o
