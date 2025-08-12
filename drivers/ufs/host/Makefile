@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0
 # UFSHCD makefile
 ifdef CONFIG_SCSI_UFS_EXYNOS
-ccflags-y += -I$(srctree)/drivers/ufs/host/$(TARGET_SOC)
+ccflags-y += -I$(srctree)/drivers/ufs/host/s5e9945
 endif
 
 obj-$(CONFIG_SCSI_UFS_DWC_TC_PCI) += tc-dwc-g210-pci.o ufshcd-dwc.o tc-dwc-g210.o
@@ -24,5 +24,3 @@ ufs-exynos-core-$(CONFIG_SCSI_UFS_EXYNOS) += ufs-exynos.o ufs-exynos-dbg.o ufs-e
 ufs-exynos-core-$(CONFIG_SCSI_UFS_EXYNOS_SRPMB) += ufs-exynos-srpmb.o
 ufs-exynos-core-$(CONFIG_SCSI_UFS_EXYNOS_FMP) += ufs-exynos-fmp.o
 ufs-exynos-core-$(CONFIG_SEC_UFS_FEATURE) += ufs-sec-feature.o ufs-sec-sysfs.o
-CFLAGS_ufs-exynos-srpmb.o += -I$(srctree)/drivers/ufs/host/s5e9945
-CFLAGS_ufs-exynos-fmp.o += -I$(srctree)/drivers/ufs/host/s5e9945
