@@ -7729,7 +7729,7 @@ wlan_util_get_chan_def(struct wireless_dev *wdev, unsigned int link_id)
 static inline struct cfg80211_chan_def
 wlan_util_get_chan_def(struct wireless_dev *wdev, unsigned int link_id)
 {
-	return wdev->chandef;
+	return wdev->preset_chandef;
 }
 #endif
 
