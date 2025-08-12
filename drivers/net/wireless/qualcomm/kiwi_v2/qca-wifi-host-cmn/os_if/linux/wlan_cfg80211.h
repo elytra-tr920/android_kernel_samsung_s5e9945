@@ -655,7 +655,7 @@ void wlan_cfg80211_ch_switch_notify(struct net_device *dev,
 				    unsigned int link_id,
 				    uint16_t puncture_bitmap)
 {
-	cfg80211_ch_switch_notify(dev, chandef, NL80211_CHAN_SWITCH_NOTIFY_PRE_SWITCH, 0);
+	cfg80211_ch_switch_notify(dev, chandef, 0, 0);
 }
 #endif
 
