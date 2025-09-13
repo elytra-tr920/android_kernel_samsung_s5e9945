@@ -3590,24 +3590,6 @@ err:
 }
 EXPORT_SYMBOL(send_usb_notify_uevent);
 
-static int is_sink_charge(struct otg_notify *n)
-{
-	struct usb_notify *u_notify = NULL;
-
-	if (!n) {
-		unl_err("%s otg_notify is null\n", __func__);
-		return 0;
-	}
-	u_notify = (struct usb_notify *)(n->u_notify);
-
-	if (u_notify->typec_status.power_role == HNOTIFY_SINK
-		&& u_notify->ndev.booster == NOTIFY_POWER_ON) {
-		unl_info("%s: sink charge\n", __func__);
-		return 1;
-	}
-	return 0;
-}
-
 static int check_reverse_bypass_device(struct usb_device *dev)
 {
 	struct dev_table *id;
@@ -3697,9 +3679,6 @@ int check_new_device_added(struct usb_device *udev)
 
 	hdev = udev->bus->root_hub;
 	if (!hdev)
-		return ret;
-
-	if (is_sink_charge(o_notify))
 		return ret;
 
 	usb_hub_for_each_child(hdev, port, dev) {
@@ -4135,7 +4114,9 @@ int set_otg_notify(struct otg_notify *n)
 
 	u_notify->udev.lpm_charging_type_done
 		= u_notify_core->lpm_charging_type_done;
+#ifndef CONFIG_DISABLE_LOCKSCREEN_USB_RESTRICTION
 	u_notify->udev.secure_lock = USB_NOTIFY_INIT_STATE;
+#endif
 	u_notify->typec_status.usb_comm_capable = USB_NOTIFY_INIT_COM_CAPABLE;
 
 	if (gpio_is_valid(n->vbus_detect_gpio) ||
@@ -4157,7 +4138,9 @@ int set_otg_notify(struct otg_notify *n)
 #endif
 
 	if (n->booting_delay_sec) {
+#ifndef CONFIG_DISABLE_LOCKSCREEN_USB_RESTRICTION
 		u_notify->lock_state = USB_NOTIFY_INIT_STATE;
+#endif
 		INIT_DELAYED_WORK(&u_notify->b_delay.booting_work,
 				  reserve_state_check);
 		schedule_delayed_work(&u_notify->b_delay.booting_work,
